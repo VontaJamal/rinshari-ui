@@ -276,7 +276,7 @@ YAML
       --base "$default_branch" \
       --head "$bootstrap_branch" \
       --title "chore: bootstrap rinshari-ui design integration" \
-      --body "This PR bootstraps \\`rinshari-ui\\` integration with submodule, agent preflight policy, PR template fields, and CI workflows."; then
+      --body "This PR bootstraps rinshari-ui integration with submodule, agent preflight policy, PR template fields, and CI workflows."; then
       echo "PR may already exist for $repo_name; continuing"
     fi
   fi
