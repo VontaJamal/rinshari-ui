@@ -38,6 +38,11 @@ When changing shared guidance:
 2. Avoid assumptions that conflict with local `docs/site-soul-brief.md` files.
 3. Write updates so downstream agents can cite applied principles in PRs.
 
+Before downstream UI/UX edits:
+1. Perform a repository-wide animation/motion audit first.
+2. Resolve animation implications before visual layout/styling changes.
+3. Explicitly report animation files checked and keep/change decisions in task or PR output.
+
 ## File/Schema Contracts
 - Lesson card schema: `templates/lesson-card.md`
 - Design preflight contract: `templates/design-preflight.md`
