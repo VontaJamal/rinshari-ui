@@ -138,11 +138,13 @@ for raw_repo in "${REPO_PATHS[@]}"; do
 ## Design Preflight Requirement (Managed)
 For any UI/UX change, agents must do all of the following before implementation:
 1. Read `design/rinshari-ui/templates/design-preflight.md`.
-2. Read relevant files in `design/rinshari-ui/principles/`.
-3. Read local `docs/site-soul-brief.md`.
-4. In task output/PR, provide:
+2. Audit repository animation/motion implementation first and note keep/change decisions.
+3. Read relevant files in `design/rinshari-ui/principles/`.
+4. Read local `docs/site-soul-brief.md`.
+5. In task output/PR, provide:
    - Applied principles
    - Site Soul alignment
+   - Animation audit summary
 <!-- RINSHARI-UI:END -->
 AGENTS
 )
@@ -157,6 +159,9 @@ AGENTS
 - 
 
 ## Site Soul alignment
+- 
+
+## Animation audit summary
 - 
 <!-- RINSHARI-UI:END -->
 PRTMP
@@ -197,17 +202,21 @@ jobs:
           printf '%s\n' "$body" | grep -q '^## Design preflight completed' || fail "Missing section: Design preflight completed"
           printf '%s\n' "$body" | grep -q '^## Applied principles' || fail "Missing section: Applied principles"
           printf '%s\n' "$body" | grep -q '^## Site Soul alignment' || fail "Missing section: Site Soul alignment"
+          printf '%s\n' "$body" | grep -q '^## Animation audit summary' || fail "Missing section: Animation audit summary"
 
           printf '%s\n' "$body" | grep -Eq '^- \[[xX]\] Yes' || fail "You must check '- [x] Yes' under Design preflight completed"
 
           applied="$(printf '%s\n' "$body" | awk '/^## Applied principles/{flag=1;next}/^## /{flag=0}flag')"
           soul="$(printf '%s\n' "$body" | awk '/^## Site Soul alignment/{flag=1;next}/^## /{flag=0}flag')"
+          animation="$(printf '%s\n' "$body" | awk '/^## Animation audit summary/{flag=1;next}/^## /{flag=0}flag')"
 
           applied_clean="$(printf '%s' "$applied" | sed 's/[[:space:]-]//g')"
           soul_clean="$(printf '%s' "$soul" | sed 's/[[:space:]-]//g')"
+          animation_clean="$(printf '%s' "$animation" | sed 's/[[:space:]-]//g')"
 
           [[ -n "$applied_clean" ]] || fail "Applied principles section cannot be empty"
           [[ -n "$soul_clean" ]] || fail "Site Soul alignment section cannot be empty"
+          [[ -n "$animation_clean" ]] || fail "Animation audit summary section cannot be empty"
 YAML
 
   cat > "$repo_path/.github/workflows/update-rinshari-ui-submodule.yml" <<'YAML'
