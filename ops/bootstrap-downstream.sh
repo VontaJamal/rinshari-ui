@@ -63,19 +63,26 @@ upsert_managed_block() {
   local start_marker="$2"
   local end_marker="$3"
   local content="$4"
+  local block_file
   mkdir -p "$(dirname "$file")"
   touch "$file"
+  block_file="$(mktemp)"
+  printf '%s\n' "$content" > "$block_file"
 
   if grep -q "$start_marker" "$file"; then
-    awk -v s="$start_marker" -v e="$end_marker" -v c="$content" '
-      BEGIN{inblock=0}
+    awk -v s="$start_marker" -v e="$end_marker" -v cfile="$block_file" '
+      function print_block(  line) {
+        while ((getline line < cfile) > 0) print line
+        close(cfile)
+      }
+      BEGIN { inblock=0 }
       {
-        if (index($0,s)) {
-          print c
+        if (index($0, s)) {
+          print_block()
           inblock=1
           next
         }
-        if (index($0,e)) {
+        if (index($0, e)) {
           inblock=0
           next
         }
@@ -84,11 +91,16 @@ upsert_managed_block() {
     ' "$file" > "$file.tmp" && mv "$file.tmp" "$file"
   else
     if [[ -s "$file" ]]; then
-      printf '\n%s\n' "$content" >> "$file"
+      printf '\n' >> "$file"
+      cat "$block_file" >> "$file"
+      printf '\n' >> "$file"
     else
-      printf '%s\n' "$content" > "$file"
+      cat "$block_file" > "$file"
+      printf '\n' >> "$file"
     fi
   fi
+
+  rm -f "$block_file"
 }
 
 IFS=',' read -r -a REPO_PATHS <<< "$REPOS_CSV"
