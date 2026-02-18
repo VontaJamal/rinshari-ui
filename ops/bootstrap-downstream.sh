@@ -163,6 +163,14 @@ AGENTS
 
 ## Animation audit summary
 - 
+
+## Engineering baseline compliance
+- [ ] TypeScript strict mode + Zod at boundaries
+- [ ] Python exception: Pydantic + Language Exception Record
+- [ ] Owner-approved non-TypeScript/non-Python exception + Language Exception Record
+
+## Engineering baseline rationale
+- 
 <!-- RINSHARI-UI:END -->
 PRTMP
 )
@@ -203,20 +211,28 @@ jobs:
           printf '%s\n' "$body" | grep -q '^## Applied principles' || fail "Missing section: Applied principles"
           printf '%s\n' "$body" | grep -q '^## Site Soul alignment' || fail "Missing section: Site Soul alignment"
           printf '%s\n' "$body" | grep -q '^## Animation audit summary' || fail "Missing section: Animation audit summary"
+          printf '%s\n' "$body" | grep -q '^## Engineering baseline compliance' || fail "Missing section: Engineering baseline compliance"
+          printf '%s\n' "$body" | grep -q '^## Engineering baseline rationale' || fail "Missing section: Engineering baseline rationale"
 
           printf '%s\n' "$body" | grep -Eq '^- \[[xX]\] Yes' || fail "You must check '- [x] Yes' under Design preflight completed"
 
           applied="$(printf '%s\n' "$body" | awk '/^## Applied principles/{flag=1;next}/^## /{flag=0}flag')"
           soul="$(printf '%s\n' "$body" | awk '/^## Site Soul alignment/{flag=1;next}/^## /{flag=0}flag')"
           animation="$(printf '%s\n' "$body" | awk '/^## Animation audit summary/{flag=1;next}/^## /{flag=0}flag')"
+          engineering="$(printf '%s\n' "$body" | awk '/^## Engineering baseline compliance/{flag=1;next}/^## /{flag=0}flag')"
+          engineering_rationale="$(printf '%s\n' "$body" | awk '/^## Engineering baseline rationale/{flag=1;next}/^## /{flag=0}flag')"
 
           applied_clean="$(printf '%s' "$applied" | sed 's/[[:space:]-]//g')"
           soul_clean="$(printf '%s' "$soul" | sed 's/[[:space:]-]//g')"
           animation_clean="$(printf '%s' "$animation" | sed 's/[[:space:]-]//g')"
+          engineering_rationale_clean="$(printf '%s' "$engineering_rationale" | sed 's/[[:space:]-]//g')"
+          engineering_checked_count="$(printf '%s\n' "$engineering" | grep -Ec '^- \[[xX]\] ' || true)"
 
           [[ -n "$applied_clean" ]] || fail "Applied principles section cannot be empty"
           [[ -n "$soul_clean" ]] || fail "Site Soul alignment section cannot be empty"
           [[ -n "$animation_clean" ]] || fail "Animation audit summary section cannot be empty"
+          [[ "$engineering_checked_count" -ge 1 ]] || fail "Engineering baseline compliance must have at least one checked option"
+          [[ -n "$engineering_rationale_clean" ]] || fail "Engineering baseline rationale section cannot be empty"
 YAML
 
   cat > "$repo_path/.github/workflows/update-rinshari-ui-submodule.yml" <<'YAML'
