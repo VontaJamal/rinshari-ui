@@ -9,3 +9,4 @@ Usage:
 
 Current principles:
 - `000-foundations.md`
+- `001-seven-saints-system.md`

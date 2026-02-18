@@ -145,6 +145,7 @@ For any UI/UX change, agents must do all of the following before implementation:
    - Applied principles
    - Site Soul alignment
    - Animation audit summary
+   - AI intent map
 <!-- RINSHARI-UI:END -->
 AGENTS
 )
@@ -162,6 +163,27 @@ AGENTS
 - 
 
 ## Animation audit summary
+- 
+
+## AI usage declaration
+- [ ] No AI used
+- [ ] AI used
+
+## AI intent and value
+- 
+
+## AI data handling
+- 
+
+## AI validation and fallback
+- 
+
+## Engineering baseline compliance
+- [ ] TypeScript strict mode + Zod at boundaries
+- [ ] Python exception: Pydantic + Language Exception Record
+- [ ] Owner-approved non-TypeScript/non-Python exception + Language Exception Record
+
+## Engineering baseline rationale
 - 
 <!-- RINSHARI-UI:END -->
 PRTMP
@@ -203,20 +225,49 @@ jobs:
           printf '%s\n' "$body" | grep -q '^## Applied principles' || fail "Missing section: Applied principles"
           printf '%s\n' "$body" | grep -q '^## Site Soul alignment' || fail "Missing section: Site Soul alignment"
           printf '%s\n' "$body" | grep -q '^## Animation audit summary' || fail "Missing section: Animation audit summary"
+          printf '%s\n' "$body" | grep -q '^## AI usage declaration' || fail "Missing section: AI usage declaration"
+          printf '%s\n' "$body" | grep -q '^## AI intent and value' || fail "Missing section: AI intent and value"
+          printf '%s\n' "$body" | grep -q '^## AI data handling' || fail "Missing section: AI data handling"
+          printf '%s\n' "$body" | grep -q '^## AI validation and fallback' || fail "Missing section: AI validation and fallback"
+          printf '%s\n' "$body" | grep -q '^## Engineering baseline compliance' || fail "Missing section: Engineering baseline compliance"
+          printf '%s\n' "$body" | grep -q '^## Engineering baseline rationale' || fail "Missing section: Engineering baseline rationale"
 
           printf '%s\n' "$body" | grep -Eq '^- \[[xX]\] Yes' || fail "You must check '- [x] Yes' under Design preflight completed"
 
           applied="$(printf '%s\n' "$body" | awk '/^## Applied principles/{flag=1;next}/^## /{flag=0}flag')"
           soul="$(printf '%s\n' "$body" | awk '/^## Site Soul alignment/{flag=1;next}/^## /{flag=0}flag')"
           animation="$(printf '%s\n' "$body" | awk '/^## Animation audit summary/{flag=1;next}/^## /{flag=0}flag')"
+          ai_usage="$(printf '%s\n' "$body" | awk '/^## AI usage declaration/{flag=1;next}/^## /{flag=0}flag')"
+          ai_intent="$(printf '%s\n' "$body" | awk '/^## AI intent and value/{flag=1;next}/^## /{flag=0}flag')"
+          ai_data="$(printf '%s\n' "$body" | awk '/^## AI data handling/{flag=1;next}/^## /{flag=0}flag')"
+          ai_validation="$(printf '%s\n' "$body" | awk '/^## AI validation and fallback/{flag=1;next}/^## /{flag=0}flag')"
+          engineering="$(printf '%s\n' "$body" | awk '/^## Engineering baseline compliance/{flag=1;next}/^## /{flag=0}flag')"
+          engineering_rationale="$(printf '%s\n' "$body" | awk '/^## Engineering baseline rationale/{flag=1;next}/^## /{flag=0}flag')"
 
           applied_clean="$(printf '%s' "$applied" | sed 's/[[:space:]-]//g')"
           soul_clean="$(printf '%s' "$soul" | sed 's/[[:space:]-]//g')"
           animation_clean="$(printf '%s' "$animation" | sed 's/[[:space:]-]//g')"
+          ai_intent_clean="$(printf '%s' "$ai_intent" | sed 's/[[:space:]-]//g')"
+          ai_data_clean="$(printf '%s' "$ai_data" | sed 's/[[:space:]-]//g')"
+          ai_validation_clean="$(printf '%s' "$ai_validation" | sed 's/[[:space:]-]//g')"
+          ai_usage_checked_count="$(printf '%s\n' "$ai_usage" | grep -Ec '^- \[[xX]\] (No AI used|AI used)$' || true)"
+          ai_used_checked_count="$(printf '%s\n' "$ai_usage" | grep -Ec '^- \[[xX]\] AI used$' || true)"
+          engineering_rationale_clean="$(printf '%s' "$engineering_rationale" | sed 's/[[:space:]-]//g')"
+          engineering_checked_count="$(printf '%s\n' "$engineering" | grep -Ec '^- \[[xX]\] ' || true)"
 
           [[ -n "$applied_clean" ]] || fail "Applied principles section cannot be empty"
           [[ -n "$soul_clean" ]] || fail "Site Soul alignment section cannot be empty"
           [[ -n "$animation_clean" ]] || fail "Animation audit summary section cannot be empty"
+          [[ "$ai_usage_checked_count" -ge 1 ]] || fail "AI usage declaration must check '- [x] No AI used' or '- [x] AI used'"
+          [[ -n "$ai_intent_clean" ]] || fail "AI intent and value section cannot be empty"
+          [[ -n "$ai_data_clean" ]] || fail "AI data handling section cannot be empty"
+          [[ -n "$ai_validation_clean" ]] || fail "AI validation and fallback section cannot be empty"
+          if [[ "$ai_used_checked_count" -ge 1 ]]; then
+            [[ -n "$ai_data_clean" ]] || fail "AI data handling must be filled when '- [x] AI used' is selected"
+            [[ -n "$ai_validation_clean" ]] || fail "AI validation and fallback must be filled when '- [x] AI used' is selected"
+          fi
+          [[ "$engineering_checked_count" -ge 1 ]] || fail "Engineering baseline compliance must have at least one checked option"
+          [[ -n "$engineering_rationale_clean" ]] || fail "Engineering baseline rationale section cannot be empty"
 YAML
 
   cat > "$repo_path/.github/workflows/update-rinshari-ui-submodule.yml" <<'YAML'
