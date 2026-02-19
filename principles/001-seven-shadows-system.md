@@ -1,13 +1,13 @@
-# 001 Seven Saints System
+# 001 Seven Shadows System
 
 ## Intent
-Define a Commander-led Seven Saints doctrine for UI/design engineering so teams can execute with broad capability, focused priorities, and consistent cross-repo standards. Orchestration remains interleaved under Commander authority rather than becoming its own saint domain. AI is treated as a force multiplier under disciplined usage laws, not as an automatic substitute for design and engineering judgment.
+Define a Commander-led Seven Shadows doctrine for UI/design engineering so teams can execute with broad capability, focused priorities, and consistent cross-repo standards. Orchestration remains interleaved under Commander authority rather than becoming its own shadow domain. AI is treated as a force multiplier under disciplined usage laws, not as an automatic substitute for design and engineering judgment.
 
 ## UX Effect
 Increase product love and long-term usage by treating aesthetics, motion, accessibility, execution, testing, scale, and value as explicit governance domains. The expected effect is interfaces that feel intentional, delightful, understandable, and dependable while remaining practical to operate. AI-assisted work should accelerate quality outcomes while preserving trust, validation rigor, and fallback behavior.
 
 ## Accessibility Implication
-Because animation and whimsical flourishes are first-class under Saint of Aesthetics, every motion decision must include reduced-motion handling, semantic alternatives, and non-motion communication paths so delight never blocks usability.
+Because animation and whimsical flourishes are first-class under Shadow of Aesthetics, every motion decision must include reduced-motion handling, semantic alternatives, and non-motion communication paths so delight never blocks usability.
 
 ## Failure Modes / Anti-patterns
 - Over-animation: adding flourishes without a user-facing purpose or reduced-motion fallback.
@@ -17,7 +17,7 @@ Because animation and whimsical flourishes are first-class under Saint of Aesthe
 - Unsafe data exposure: sending raw secrets, credentials, or sensitive user data to external AI systems.
 - AI autopilot without validation: accepting generated outputs without independent verification or behavioral testing.
 - Missing fallback: shipping AI-assisted flows without manual/degraded-mode behavior.
-- Doctrine drift: treating saints as optional themes instead of enforceable delivery gates.
+- Doctrine drift: treating shadows as optional themes instead of enforceable delivery gates.
 
 ## Source Traces
 - `/Users/vonta/Documents/Code Repos/rinshari-ui/AGENTS.md`

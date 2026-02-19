@@ -188,16 +188,16 @@ check_file() {
   fi
 
   for required in \
-    "The Seven Saints" \
+    "The Seven Shadows" \
     "Protagonist Commander" \
     "AI is a force multiplier under command discipline, not a substitute for judgment." \
-    "Saint of Aesthetics" \
-    "Saint of Security" \
-    "Saint of Accessibility" \
-    "Saint of Testing" \
-    "Saint of Execution" \
-    "Saint of Scales" \
-    "Saint of Value" \
+    "Shadow of Aesthetics" \
+    "Shadow of Security" \
+    "Shadow of Accessibility" \
+    "Shadow of Testing" \
+    "Shadow of Execution" \
+    "Shadow of Scales" \
+    "Shadow of Value" \
     "Script (AI Laws):" \
     "No raw secrets, credentials, or sensitive user data to external AI systems." \
     "TypeScript is the default language for all new implementation work" \
